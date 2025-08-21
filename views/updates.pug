@@ -1,0 +1,25 @@
+doctype html
+html 
+    head 
+        title= title
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        link(rel="stylesheet", href="/css/style.css")
+    body
+        a(href="/") Return to the homepage
+
+        h1 Update a Snack Record
+
+        form(method="POST", action="/update-cobj")
+    
+            label(for="name") Name:
+            input(type="text", name="name")
+            br
+
+            label(for="flavor") Pittigheidsgraad:
+            input(type="text", name="pittigheidsgraad")
+            br
+            label(for="flavor") Heerlijkheidsscore:
+            input(type="text", name="heerlijkheidsscore")
+            br
+
+            button(type="submit") Update Snack
