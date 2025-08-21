@@ -52,29 +52,30 @@ app.get('/update-cobj', async (req, res) => {
 
 app.post('/update-cobj', async (req, res) => {
 
-    const { name, pittigheidsgraad, heerlijkheidsscore } = req.body;
+    const record = {
+        properties: {
+            name: req.body.name,              
+            pittigheidsgraad: req.body.pittigheidsgraad,
+            heerlijkheidsscore: req.body.heerlijkheidsscore
+         
+        }
+    }
 
-    const properties = {};
-    if (name) properties.name = name;
-    if (pittigheidsgraad) properties.pittigheidsgraad = pittigheidsgraad;
-    if (heerlijkheidsscore) properties.heerlijkheidsscore = heerlijkheidsscore;
-
-    const url = `https://api.hubspot.com/crm/v3/objects/p_snacks/${name}`;
-
-    try {
-        await fetch(url, {
-            method: 'PATCH',
-            headers: {
-                Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ properties })
-        });
-
-        res.send('<p>Snack record updated!</p><a href="/update-cobj">Update another</a>');
+     try {
+        const response = await axios.post(
+            `https://api.hubspot.com/crm/v3/objects/p_snacks`,
+            record,
+            {
+                headers: {
+                    Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
+                    'Content-Type': 'application/json'
+                }
+            }
+        );
+   
+        res.redirect('/');
     } catch (error) {
-        console.error(error);
-        res.status(500).send(`<p>Error updating snack: ${error.message}</p>`);
+        res.status(500).json({ error: error.response?.data || error.message });
     }
 });
 
